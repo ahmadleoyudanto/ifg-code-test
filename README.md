@@ -1,62 +1,123 @@
-# ifg-code-test
+# 🎫 CRUD + KAFKA
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project is a crud users system built using **Quarkus**, **MySQL**, and **Kafka**.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+---
 
-## Running the application in dev mode
+## 🧱 Tech Stack
 
-You can run your application in dev mode that enables live coding using:
+- Java 17
+- Quarkus
+- MySQL
+- Kafka
+- Flyway (for DB migrations)
+- Docker + Docker Compose
+- Swagger (for API documentation)
 
-```shell script
+---
+
+## 🚀 Getting Started
+
+### 1. 📋 Prerequisites
+
+Make sure you have the following installed:
+
+- Java 17+
+- Maven
+- Docker + Docker Compose
+
+### 2. 🗃️ Database Setup
+
+- Create a user with `username` `root` and `password` `root`
+- Create a database named `ifg_code_test` before running the application:
+
+```sql
+CREATE DATABASE ifg_code_test;
+```
+
+- Set user to be able to access database `ifg_code_test`
+- or if you already have user, you can configure `application.properties` as follows:
+
+```
+quarkus.datasource.username=<your_username>
+quarkus.datasource.password=<your_password>
+```
+
+### 3. 🐳 Running in Docker
+
+- Build the Quarkus App
+```
+./mvnw package
+```
+- Build Docker Image
+```
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/ifg-code-test-jvm .
+```
+- Start the Services
+```
+docker-compose up
+```
+- Setup kafka container in `docker-compose.yaml`
+```
+environment:
+    # after change the host, delete the container first
+    # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-container:9092
+```
+
+### 4. 💻 Running in Local
+
+- Setup kafka container in `docker-compose.yaml`
+```
+environment:
+    # after change the host, delete the container first
+    # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+```
+- go to the project root, open terminal and run this command:
+```
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+### 5. 🔗 API Documentation
+Once the app is running, you can check the available API endpoints here:
+http://localhost:8080/swagger-ui/index.html
 
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./mvnw package
+### 6. 🔧 How to use
+- create a user
+```
+curl --location 'http://localhost:8080/webhook/user' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "name",
+    "type": "add"
+}'
+```
+- edit a user
+```
+curl --location 'http://localhost:8080/webhook/user' \
+--header 'Content-Type: application/json' \
+--data '{
+    "id": 1,
+    "name": "name",
+    "type": "edit"
+}'
+```
+- delete a user
+```
+curl --location 'http://localhost:8080/webhook/user' \
+--header 'Content-Type: application/json' \
+--data '{
+    "id":1,
+    "type": "delete"
+}'
+```
+- retry dead letter user
+```
+curl --location --request POST 'http://localhost:8080/webhook/retry-dead-letter-user'
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/ifg-code-test-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+### 7. ⚠️ Constraint and Limitation
+- Authentication:
+  This project does not implement login/token authentication to simplify testing under concurrent load. The focus is on demonstrating booking logic and quota control.
+- Unit Tests:
+  Unit tests are not included due to time constraints. Writing meaningful tests for such flows would require mocking Redis, DB, and possibly multi-thread scenarios — nearly as involved as
+  building the actual logic.

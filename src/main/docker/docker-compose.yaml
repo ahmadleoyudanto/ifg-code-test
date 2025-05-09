@@ -41,9 +41,9 @@ services:
       - "9092:9092"
     environment:
       LOG_DIR: "/tmp/logs"
-      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       # after change the host, delete the container first
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-container:9092
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-container:9092
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-container:2181
     networks:
