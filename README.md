@@ -117,7 +117,6 @@ curl --location --request POST 'http://localhost:8080/webhook/retry-dead-letter-
 
 ### 7. ⚠️ Constraint and Limitation
 - Authentication:
-  This project does not implement login/token authentication to simplify testing under concurrent load. The focus is on demonstrating booking logic and quota control.
+  This project does not implement login/token authentication to simplify testing and focus on the core CRUD logic with Kafka integration.
 - Unit Tests:
-  Unit tests are not included due to time constraints. Writing meaningful tests for such flows would require mocking Redis, DB, and possibly multi-thread scenarios — nearly as involved as
-  building the actual logic.
+  Unit tests are not included due to time constraints. Writing tests for Kafka publishers and consumers requires mocking Kafka, which involves additional complexity that wasn't feasible within the available time.
