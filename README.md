@@ -53,15 +53,15 @@ quarkus.datasource.password=<your_password>
 ```
 docker build -f src/main/docker/Dockerfile.jvm -t quarkus/ifg-code-test-jvm .
 ```
-- Start the Services
-```
-docker-compose up
-```
 - Setup kafka container in `docker-compose.yaml`
 ```
 environment:
     # after change the host, delete the container first
     # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-container:9092
+```
+- Start the Services
+```
+docker-compose up
 ```
 
 ### 4. 💻 Running in Local
