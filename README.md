@@ -1,4 +1,4 @@
-# 🎫 CRUD + KAFKA
+# CRUD + KAFKA
 
 This project is a crud users system built using **Quarkus**, **MySQL**, and **Kafka**.
 
